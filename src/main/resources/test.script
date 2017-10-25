@@ -1,26 +1,50 @@
+# #################################################################
+#
+#        record a video for peregrine-cms asset management
+#
+# #################################################################
+
+# select chrome to perform the screen recording
 use chrome
 
+# open the given page with the browser
 open http://localhost:8080
+
+# start recording
 start intro
 
+# create the intro audio file (back ticks can be used for multi line text)
 audio text `Welcome to this little demo of peregrine cms.
 We will walk you through the main functionality with this guide.`
+
+# wait for the audio to complete playing
 wait audio
 
 audio text First we need to log in. The default credentials are user name 'admin', password 'admin'.
 wait audio
 
+# move to a dialog field and click into it
 moveTo id j_username
 click id j_username
+
+# type in the text admin
 input admin
+
 moveTo id j_password
 click id j_password
 input admin
+
+# hit the enter key
 enter
+
+# wait for a defined time in milliseconds
 wait 1000
+
+# play more audio and wait for it to complete
 audio text Now we see the welcome screen. Let's click on the 'admin' link in the administrator section.
 wait audio
 
+# move to and click a field by its xpath
 moveTo xpath /html/body/div[2]/div[2]/div[2]/div/div[2]/a[1]
 click xpath /html/body/div[2]/div[2]/div[2]/div/div[2]/a[1]
 wait 1000
@@ -80,10 +104,13 @@ click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div/div/div[1]/ul/li[2
 
 wait 1000
 
+# accept the dialog that pops up
 acceptDialog
 
 audio text Thank you for watching this small peregrine-cms demo. I hope you liked it.
 wait audio
 
 wait 2000
+
+# stop the recording
 stop
