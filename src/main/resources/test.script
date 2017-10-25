@@ -1,0 +1,89 @@
+use chrome
+
+open http://localhost:8080
+start intro
+
+audio text `Welcome to this little demo of peregrine cms.
+We will walk you through the main functionality with this guide.`
+wait audio
+
+audio text First we need to log in. The default credentials are user name 'admin', password 'admin'.
+wait audio
+
+moveTo id j_username
+click id j_username
+input admin
+moveTo id j_password
+click id j_password
+input admin
+enter
+wait 1000
+audio text Now we see the welcome screen. Let's click on the 'admin' link in the administrator section.
+wait audio
+
+moveTo xpath /html/body/div[2]/div[2]/div[2]/div/div[2]/a[1]
+click xpath /html/body/div[2]/div[2]/div[2]/div/div[2]/a[1]
+wait 1000
+
+audio text Here you see different pods to further access the system. let's add an asset.
+wait audio
+
+audio text Click on the 'explore' link in the assets section and the interface switches to asset management.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[2]/div/div[2]/span/a
+click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[2]/div/div[2]/span/a
+wait 1000
+
+audio text We can source an asset from pixabay by clicking the plus icon in the top right corner.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/nav/div[2]/span[2]/a/i
+click xpath //*[@id="peregrine-adminapp"]/span/div/nav/div[2]/span[2]/a/i
+
+audio text I can search for any term, let's use 'malinois', a breed of dogs and hit enter.
+wait audio
+
+input malinois
+enter
+
+wait 3000
+
+audio text I like the last image in the first row. Click it to add it to peregrine.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[7]
+click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[7]
+wait 2000
+
+audio text We see a larger view of the asset and can click the button to add it to the CMS.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[1]/div/form/button
+click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div[2]/div/div[1]/div/form/button
+
+wait 1000
+
+audio text I can now select the asset to get more information about it.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div/div/div[1]/ul/li[2]/span/a
+click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div/div/div[1]/ul/li[2]/span/a
+
+wait 1000
+
+audio text And I can delete the asset by clicking the trashcan icon.
+wait audio
+
+moveTo xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div/div/div[1]/ul/li[2]/div/span[2]/a/i
+click xpath //*[@id="peregrine-adminapp"]/span/div/div[1]/div/div/div[1]/ul/li[2]/div/span[2]/a/i
+
+wait 1000
+
+acceptDialog
+
+audio text Thank you for watching this small peregrine-cms demo. I hope you liked it.
+wait audio
+
+wait 2000
+stop
