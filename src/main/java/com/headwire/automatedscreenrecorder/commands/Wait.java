@@ -16,6 +16,8 @@ public class Wait extends Command {
         String modifier = args.getModifier();
         try {
             long time = Integer.parseInt(modifier);
+            long maxWait = ctx.getMaxWait();
+            time = Math.min(time, maxWait);
             try {
                 Thread.sleep(time);
             } catch (InterruptedException e) {
@@ -23,6 +25,8 @@ public class Wait extends Command {
             }
         } catch(NumberFormatException nfe) {
             try {
+                if(!ctx.produceAudio()) return;
+
                 AudioMark mark = ctx.getLastAudioMark();
                 File file = new File(mark.getFile());
                 AudioFileFormat baseFileFormat = AudioSystem.getAudioFileFormat(file);

@@ -13,6 +13,7 @@ import org.openqa.selenium.interactions.Actions;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
 
 public class Driver extends TypeCondition {
 
@@ -209,5 +210,18 @@ public class Driver extends TypeCondition {
 	public void acceptAlert() {
 		Alert alert = driver.switchTo().alert();
 		alert.accept();
+	}
+
+    public void switchTo(String iframe) {
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		if("default".equals(iframe)) {
+			driver.switchTo().defaultContent();
+		} else {
+			driver.switchTo().frame(iframe);
+		}
+    }
+
+	public void sendKeys(String key) {
+		getActiveElement().sendKeys(key);
 	}
 }

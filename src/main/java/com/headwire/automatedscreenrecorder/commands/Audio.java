@@ -35,8 +35,15 @@ public class Audio extends Command {
     }
     @Override
     public void execute(Context ctx, Arguments args) {
+        if(!ctx.produceAudio()) return;
+
         String fileName = "target/"+encodeTextToFileName(args.getModifier(), args.getData()) + ".mp3";
+
+        System.out.println("writing audio for "+args.getData());
+
         ctx.markAudio(fileName, args.getData());
+
+        System.out.println("/writing audio");
 
         try {
             TextToSpeech tts = new TextToSpeech(Region.getRegion(Regions.US_EAST_1));

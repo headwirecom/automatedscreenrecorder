@@ -4,14 +4,13 @@ import com.headwire.automatedscreenrecorder.helpers.Arguments;
 import com.headwire.automatedscreenrecorder.helpers.Command;
 import com.headwire.automatedscreenrecorder.helpers.Context;
 
-public class MoveTo extends Command {
+public class DoubleClick extends Command {
     @Override
     public void execute(Context ctx, Arguments args) {
-        if(ctx.getMaxWait() != Long.MAX_VALUE) return;
         try {
-            ctx.getDriver().goTo(args.getData(), args.getModifier());
+            ctx.getDriver().doubleclick(args.getData(), args.getModifier());
         } catch (Exception e) {
-            throw new RuntimeException("failed to move to "+args.getCommand(), e);
+            throw new RuntimeException("failed to double click "+args.getCommand(), e);
         }
     }
 }

@@ -77,4 +77,12 @@ public class Context {
     public AudioMark getLastAudioMark() {
         return audioMarks.get(audioMarks.size() - 1);
     }
+
+    public boolean produceAudio() {
+        return config.produceAudio();
+    }
+
+    public long getMaxWait() {
+        return config.getMaxWait();
+    }
 }

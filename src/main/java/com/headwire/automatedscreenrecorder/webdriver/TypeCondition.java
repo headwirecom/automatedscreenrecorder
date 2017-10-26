@@ -15,6 +15,8 @@ public abstract class TypeCondition {
 			return Driver.driver.findElement(By.id(var));
 		} else if (type.equals("name")) {
 			return Driver.driver.findElement(By.name(var));
+		} else if (type.equals("class")) {
+			return Driver.driver.findElement(By.className(var));
 		} else {
 			return null;
 		}

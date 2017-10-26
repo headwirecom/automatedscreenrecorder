@@ -1,20 +1,14 @@
 package com.headwire.automatedscreenrecorder.app;
 
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.headwire.automatedscreenrecorder.commands.*;
 import com.headwire.automatedscreenrecorder.helpers.Arguments;
-import com.headwire.automatedscreenrecorder.helpers.AudioMark;
 import com.headwire.automatedscreenrecorder.helpers.Command;
 import com.headwire.automatedscreenrecorder.helpers.Context;
 import com.headwire.automatedscreenrecorder.texttospeech.AudioVideoMerge;
-import com.headwire.automatedscreenrecorder.texttospeech.TextToSpeech;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AutomatedScreenRcorder {
@@ -33,6 +27,8 @@ public class AutomatedScreenRcorder {
         COMMANDS.put("start", new Start());
         COMMANDS.put("stop", new Stop());
         COMMANDS.put("audio", new Audio());
+        COMMANDS.put("switchTo", new SwitchTo());
+        COMMANDS.put("doubleClick", new DoubleClick());
     }
 
     private final Context context;
@@ -44,7 +40,11 @@ public class AutomatedScreenRcorder {
     public void run() {
         try {
             parseScript();
-            new AudioVideoMerge().mergeAudioVideo(context);
+
+            // only process audio if we actually have audio files
+            if(context.getAudioMarks().size() > 0) {
+                new AudioVideoMerge().mergeAudioVideo(context);
+            }
 
         } catch(Throwable t) {
             System.out.println("error while recording");
