@@ -49,4 +49,8 @@ public class Arguments {
     public void cleanData() {
         data = data.substring(1, data.length() -1);
     }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
 }

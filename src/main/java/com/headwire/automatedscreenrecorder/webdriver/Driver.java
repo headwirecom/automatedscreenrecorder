@@ -130,7 +130,7 @@ public class Driver extends TypeCondition {
 	}
 
 	public void goToAndClick(String var, String type) throws Exception {
-		goTo(var, type);
+		goTo(var, type, false);
 		click(var, type);
 	}
 
@@ -152,17 +152,17 @@ public class Driver extends TypeCondition {
 		initRobot().keyRelease(KeyEvent.VK_ENTER);
 	}
 
-	public void goTo(String var, String type) throws Exception {
+	public void goTo(String var, String type, boolean direct) throws Exception {
 		double[] coordinates;
 		coordinates = prepareCoordinates(var, type);
-		mouseMovement(coordinates);
+		mouseMovement(coordinates, direct);
 	}
 	
 	public void dragAndDrop(String var, String type) throws Exception {
 		double[] coordinates;
 		coordinates = prepareCoordinates(var, type);
 		initRobot().mousePress(InputEvent.BUTTON1_MASK);
-		mouseMovement(coordinates);
+		mouseMovement(coordinates, false);
 		initRobot().mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
@@ -189,7 +189,7 @@ public class Driver extends TypeCondition {
 		return coordinates;
 	}
 	
-	private void mouseMovement(double[] coordinates) throws Exception {
+	private void mouseMovement(double[] coordinates, boolean direct) throws Exception {
 		double pFromX = coordinates[0];
 		double pFromY = coordinates[1];
 		double pToX = coordinates[2];
@@ -198,13 +198,17 @@ public class Driver extends TypeCondition {
 		double distance = Math.sqrt(Math.pow(pToX - pFromX, 2) + Math.pow(pToY - pFromY, 2));
 		double step = distance/100.;
 
-		for(double i = 0; i < distance; i+= step) {
-			double x = pFromX + (pToX-pFromX)/distance * (i * (Math.pow(Math.sin(Math.PI/2 * (i/distance)),2.0)));
-			double y = pFromY + (pToY-pFromY)/distance * (i * (Math.pow(Math.sin(Math.PI/2 * (i/distance)),2.0)));
-			initRobot().mouseMove((int)x, (int)y);
+		if(direct) {
+			initRobot().mouseMove((int)pToX, (int)pToY);
 			Thread.sleep(5);
+		} else {
+			for(double i = 0; i < distance; i+= step) {
+				double x = pFromX + (pToX-pFromX)/distance * (i * (Math.pow(Math.sin(Math.PI/2 * (i/distance)),2.0)));
+				double y = pFromY + (pToY-pFromY)/distance * (i * (Math.pow(Math.sin(Math.PI/2 * (i/distance)),2.0)));
+				initRobot().mouseMove((int)x, (int)y);
+				Thread.sleep(5);
+			}
 		}
-		if(true) return;
 	}
 
 	public void acceptAlert() {

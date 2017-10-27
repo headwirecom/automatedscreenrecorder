@@ -25,15 +25,23 @@ public class Wait extends Command {
             }
         } catch(NumberFormatException nfe) {
             try {
-                if(!ctx.produceAudio()) return;
+                if(!ctx.produceAudio()) {
+                    execute(ctx, new Arguments("wait 100"));
+                    return;
+                }
+
+                long add = 0;
+                if(args.getData() != null) {
+                    add = Integer.parseInt(args.getData());
+                }
 
                 AudioMark mark = ctx.getLastAudioMark();
                 File file = new File(mark.getFile());
                 AudioFileFormat baseFileFormat = AudioSystem.getAudioFileFormat(file);
                 Map properties = baseFileFormat.properties();
-                Long duration = (Long) properties.get("duration");
-                System.out.println(modifier + " duration: "+(duration/1000));
-                Thread.sleep(duration/1000);
+                Long duration = (Long) properties.get("duration") - 500;
+                System.out.println(modifier + " duration: "+((duration+add)/1000));
+                Thread.sleep((duration+add)/1000);
             } catch(Throwable t) {
                 t.printStackTrace();
             }

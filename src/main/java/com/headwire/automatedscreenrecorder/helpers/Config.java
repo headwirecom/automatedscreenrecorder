@@ -10,21 +10,25 @@ public class Config {
         this.props = props;
     }
 
+    private String getProp(String name) {
+        return System.getProperty(name, props.getProperty(name));
+    }
+
     public String getDriverPath() {
-        return (String) props.get("driver");
+        return (String) getProp("driver");
     }
 
     public String getFFMpegPath() {
-        return (String) props.get("ffmpeg");
+        return (String) getProp("ffmpeg");
     }
 
     public boolean produceAudio() {
-        return "true".equals(props.get("audio"));
+        return getProp("audio") == null || "".equals(getProp("audio")) || "true".equals(getProp("audio"));
     }
 
     public long getMaxWait() {
         long ret = Long.MAX_VALUE;
-        String maxWait = (String)props.get("maxWait");
+        String maxWait = (String)getProp("maxWait");
         if(maxWait != null) {
             ret = Integer.parseInt(maxWait);
             if(ret == 0) {

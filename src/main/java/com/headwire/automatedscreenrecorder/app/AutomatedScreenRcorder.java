@@ -5,16 +5,25 @@ import com.headwire.automatedscreenrecorder.helpers.Arguments;
 import com.headwire.automatedscreenrecorder.helpers.Command;
 import com.headwire.automatedscreenrecorder.helpers.Context;
 import com.headwire.automatedscreenrecorder.texttospeech.AudioVideoMerge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * main screen recorder class
+ */
 public class AutomatedScreenRcorder {
 
+    private static Logger LOG = LoggerFactory.getLogger(AutomatedScreenRcorder.class);
+
+    /** list of all the available commands for the script language **/
     private static HashMap<String, Command> COMMANDS = new HashMap<>();
 
+    /* initialize the list of commands */
     static {
         COMMANDS.put("use", new Use());
         COMMANDS.put("open", new Open());
@@ -31,12 +40,21 @@ public class AutomatedScreenRcorder {
         COMMANDS.put("doubleClick", new DoubleClick());
     }
 
+    /** the context for the execution of this recording **/
     private final Context context;
 
+    /** constructor
+     *
+     * @param context the context to use with this recording
+     */
     public AutomatedScreenRcorder(Context context) {
         this.context = context;
     }
 
+    /** run the screen recording based on the context.
+     * this will first record the screen with the given script and then merge
+     * all audio files into the resulting video file
+     * **/
     public void run() {
         try {
             parseScript();
@@ -47,12 +65,13 @@ public class AutomatedScreenRcorder {
             }
 
         } catch(Throwable t) {
-            System.out.println("error while recording");
-            t.printStackTrace();
+            LOG.info("general error while recording");
+            LOG.debug("general error while recording", t);
         }
         System.exit(0);
     }
 
+    /** script parser */
     private void parseScript() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(context.getScript()));
         String line = br.readLine();
@@ -62,6 +81,8 @@ public class AutomatedScreenRcorder {
                 // skip, comment or empty line
             } else {
                 Arguments args = new Arguments(line);
+
+                // check if this is a multi line argument
                 if(args.getData() != null && args.getData().startsWith("`")) {
                     line = br.readLine();
                     while(line != null) {
@@ -74,10 +95,13 @@ public class AutomatedScreenRcorder {
                     }
                 }
                 try {
+                    // make sure back ticks are removed from single line commands as well
+                    if(args.getData().startsWith("`")) {
+                        args.cleanData();
+                    }
                     perform(args);
                 } catch(Throwable t) {
-                    System.out.println("error while performing "+line);
-                    t.printStackTrace();
+                    LOG.info("not able to perform '{}'", line, t);
                     br.close();
                     context.getDriver().quit();
                     return;
@@ -91,13 +115,25 @@ public class AutomatedScreenRcorder {
         context.getDriver().quit();
     }
 
+    /** execute the given argument (splits this into multiple commands is the command contains commas
+     *
+     * @param args
+     */
     private void perform(Arguments args) {
         String commandName = args.getCommand();
+        if(commandName.indexOf(",") > 0) {
+            String[] commands = commandName.split(",");
+            for(int i = 0; i < commands.length; i++) {
+                args.setCommand(commands[i].trim());
+                perform(args);
+            }
+            return;
+        }
         Command command = COMMANDS.get(commandName);
         if(command != null) {
             command.execute(context, args);
         } else {
-            System.out.println("unknown command "+commandName);
+            LOG.info("unknown command '{}'", commandName);
         }
     }
 }

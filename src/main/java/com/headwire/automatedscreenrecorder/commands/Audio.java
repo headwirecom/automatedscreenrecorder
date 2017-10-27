@@ -35,7 +35,10 @@ public class Audio extends Command {
     }
     @Override
     public void execute(Context ctx, Arguments args) {
-        if(!ctx.produceAudio()) return;
+        if(!ctx.produceAudio()) {
+            System.out.println(">>>>" + args.getData());
+            return;
+        }
 
         String fileName = "target/"+encodeTextToFileName(args.getModifier(), args.getData()) + ".mp3";
 

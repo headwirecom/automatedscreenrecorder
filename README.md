@@ -20,6 +20,11 @@ git clone https://github.com/headwirecom/automatedscreenrecorder.git
 
 Modify the `asr.properties` file to point to the location of the chrome driver and ffmpeg to be used. 
 
+Note: you can also set the properties in asr.properties by passing them as `-D` arguments on 
+the command line. For example `-Daudio=false -DmaxWait=100` will allow you to quickly test
+your script without adding audio into the final file and waiting for a maximum time of 100ms
+at every wait. 
+
 Make sure the environment variables for your AWS account are set up - for windows you can use
 
 ```
@@ -51,6 +56,9 @@ command modifier data
 Multi Line:
 command modifier `data
 more lines`
+
+#multiple commands with the same modifier and data
+command,command modifier data
 ```
 
 ## Commands
@@ -125,9 +133,14 @@ wait 1000
 
 # wait for audio to complete playing
 wait audio
+
+# wait for audio to complete playing plus/minus an offset
+wait audio -1000
 ```
 The wait command waits either for a given time in milli seconds or for the most recent audio file
-to complete playing. 
+to complete playing. If the audio option is used an additional parameter can be passed to add/subtract
+time. This allows you to for example start the next mouse movement before the end of the audio file
+to generate a more fluent recording. 
 
 ### moveTo
 
@@ -145,7 +158,9 @@ moveTo name some-name
 moveTo xpath some-xpath
 
 ```
-moves the mouse to the given location of an html page by id, name or xpath.
+moves the mouse to the given location of an html page by id, name or xpath. If audio generation
+is turned off the mouse will move directly to the new element, otherwise it will move to the
+new location within a second to create a more realistic recording. 
 
 ### click
 ```click <modifier> <data>```

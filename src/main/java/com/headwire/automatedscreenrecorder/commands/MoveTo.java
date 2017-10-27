@@ -7,9 +7,8 @@ import com.headwire.automatedscreenrecorder.helpers.Context;
 public class MoveTo extends Command {
     @Override
     public void execute(Context ctx, Arguments args) {
-        if(ctx.getMaxWait() != Long.MAX_VALUE) return;
         try {
-            ctx.getDriver().goTo(args.getData(), args.getModifier());
+            ctx.getDriver().goTo(args.getData(), args.getModifier(), ctx.getMaxWait() != Long.MAX_VALUE);
         } catch (Exception e) {
             throw new RuntimeException("failed to move to "+args.getCommand(), e);
         }
