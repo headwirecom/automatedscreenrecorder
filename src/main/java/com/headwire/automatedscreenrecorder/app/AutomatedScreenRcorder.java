@@ -81,6 +81,7 @@ public class AutomatedScreenRcorder {
                 // skip, comment or empty line
             } else {
                 Arguments args = new Arguments(line);
+                LOG.debug(args.toString());
 
                 // check if this is a multi line argument
                 if(args.getData() != null && args.getData().startsWith("`")) {
@@ -96,7 +97,7 @@ public class AutomatedScreenRcorder {
                 }
                 try {
                     // make sure back ticks are removed from single line commands as well
-                    if(args.getData().startsWith("`")) {
+                    if(args.getData() != null && args.getData().startsWith("`")) {
                         args.cleanData();
                     }
                     perform(args);
@@ -120,6 +121,7 @@ public class AutomatedScreenRcorder {
      * @param args
      */
     private void perform(Arguments args) {
+        LOG.debug(args.getCommand());
         String commandName = args.getCommand();
         if(commandName.indexOf(",") > 0) {
             String[] commands = commandName.split(",");
